@@ -11,6 +11,7 @@ from selection.skill_ranker import calculate_skill_score
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # ================= DATABASE INIT =================
@@ -69,12 +70,15 @@ def home():
     return redirect("/candidate/login")
 
 # ================= HR =================
-@app.route("/hr/login", methods=["GET","POST"])
+@app.route("/hr/login", methods=["GET", "POST"])
 def hr_login():
     if request.method == "POST":
         conn = sqlite3.connect(DB_NAME)
         cur = conn.cursor()
-        cur.execute("SELECT password FROM hr_users WHERE username=?", (request.form["username"],))
+        cur.execute(
+            "SELECT password FROM hr_users WHERE username=?",
+            (request.form["username"],)
+        )
         row = cur.fetchone()
         conn.close()
 
@@ -115,7 +119,7 @@ def hr_dashboard():
     )
 
 # ================= SKILLS =================
-@app.route("/hr/skills", methods=["GET","POST"])
+@app.route("/hr/skills", methods=["GET", "POST"])
 @hr_required
 def hr_skills():
     conn = sqlite3.connect(DB_NAME)
@@ -135,7 +139,7 @@ def hr_skills():
                 )
             else:
                 cur.execute(
-                    "INSERT INTO skills (skill_name, weight) VALUES (?,?)",
+                    "INSERT INTO skills (skill_name, weight) VALUES (?, ?)",
                     (request.form["skill"], request.form["weight"])
                 )
         conn.commit()
@@ -180,7 +184,7 @@ def run_selection():
     conn.close()
     return redirect("/hr/candidates")
 
-# ================= CANDIDATES =================
+# ================= CANDIDATES LIST =================
 @app.route("/hr/candidates")
 @hr_required
 def hr_candidates():
@@ -214,7 +218,7 @@ def hr_candidates():
         status=status
     )
 
-# ================= DELETE RESUME (NEW) =================
+# ================= DELETE RESUME =================
 @app.route("/hr/delete_resume/<int:candidate_id>", methods=["POST"])
 @hr_required
 def delete_resume(candidate_id):
@@ -247,14 +251,14 @@ def hr_logout():
     return redirect("/hr/login")
 
 # ================= CANDIDATE =================
-@app.route("/candidate/register", methods=["GET","POST"])
+@app.route("/candidate/register", methods=["GET", "POST"])
 def candidate_register():
     if request.method == "POST":
         conn = sqlite3.connect(DB_NAME)
         cur = conn.cursor()
         cur.execute("""
-            INSERT INTO candidates (name,email,password,status)
-            VALUES (?,?,?,?)
+            INSERT INTO candidates (name, email, password, status)
+            VALUES (?, ?, ?, ?)
         """, (
             request.form["name"],
             request.form["email"],
@@ -267,12 +271,15 @@ def candidate_register():
 
     return render_template("candidate/candidate_register.html")
 
-@app.route("/candidate/login", methods=["GET","POST"])
+@app.route("/candidate/login", methods=["GET", "POST"])
 def candidate_login():
     if request.method == "POST":
         conn = sqlite3.connect(DB_NAME)
         cur = conn.cursor()
-        cur.execute("SELECT id,password FROM candidates WHERE email=?", (request.form["email"],))
+        cur.execute(
+            "SELECT id, password FROM candidates WHERE email=?",
+            (request.form["email"],)
+        )
         row = cur.fetchone()
         conn.close()
 
@@ -284,7 +291,7 @@ def candidate_login():
 
     return render_template("candidate/candidate_login.html")
 
-@app.route("/candidate/dashboard", methods=["GET","POST"])
+@app.route("/candidate/dashboard", methods=["GET", "POST"])
 @candidate_required
 def candidate_dashboard():
     if request.method == "POST":
@@ -294,8 +301,10 @@ def candidate_dashboard():
 
         conn = sqlite3.connect(DB_NAME)
         cur = conn.cursor()
-        cur.execute("UPDATE candidates SET resume_path=? WHERE id=?",
-                    (path, session["candidate_id"]))
+        cur.execute(
+            "UPDATE candidates SET resume_path=? WHERE id=?",
+            (path, session["candidate_id"])
+        )
         conn.commit()
         conn.close()
 
@@ -306,8 +315,10 @@ def candidate_dashboard():
 def candidate_result():
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
-    cur.execute("SELECT skill_score, rank, status FROM candidates WHERE id=?",
-                (session["candidate_id"],))
+    cur.execute(
+        "SELECT skill_score, rank, status FROM candidates WHERE id=?",
+        (session["candidate_id"],)
+    )
     result = cur.fetchone()
     conn.close()
     return render_template("candidate/candidate_result.html", result=result)
@@ -317,5 +328,7 @@ def candidate_logout():
     session.pop("candidate_id", None)
     return redirect("/candidate/login")
 
+# ================= RENDER ENTRY =================
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
