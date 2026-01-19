@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Candidates</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="page-logo">
+    <img src="{{ url_for('static', filename='images/logo.png') }}">
+</div>
+
+<div class="container">
+    <h2>Candidates</h2>
+
+    <form method="GET">
+        <input name="search" placeholder="Search name/email" value="{{ search }}">
+        <select name="status">
+            <option value="">All</option>
+            <option value="Selected" {% if status=='Selected' %}selected{% endif %}>Selected</option>
+            <option value="Not Selected" {% if status=='Not Selected' %}selected{% endif %}>Not Selected</option>
+        </select>
+        <button>Apply</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Score</th>
+            <th>Rank</th>
+            <th>Status</th>
+            <th>Resume</th>
+            <th>Action</th>
+        </tr>
+
+        {% for c in candidates %}
+        <tr>
+            <td>{{ c[1] }}</td>
+            <td>{{ c[2] }}</td>
+            <td>{{ c[4] }}</td>
+            <td>{{ c[5] }}</td>
+            <td>{{ c[6] }}</td>
+
+            <td>
+                {% if c[3] %}
+                    <a href="/{{ c[3] }}" target="_blank">View</a> |
+                    <a href="/{{ c[3] }}" download>Download</a>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+            <td>
+                {% if c[3] %}
+                <form method="POST"
+                      action="/hr/delete_resume/{{ c[0] }}"
+                      onsubmit="return confirm('Delete this resume?');">
+                    <button style="background:#c0392b;">Delete Resume</button>
+                </form>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="/hr/dashboard">Back</a>
+</div>
+
+</body>
+</html>

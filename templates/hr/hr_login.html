@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- LOGO OUTSIDE BOX -->
+<div class="logo-wrapper">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo-xl" alt="Logo">
+</div>
+
+<div class="container">
+    <h2>HR Login</h2>
+
+    <form method="POST">
+        <input type="text" name="username" placeholder="HR Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

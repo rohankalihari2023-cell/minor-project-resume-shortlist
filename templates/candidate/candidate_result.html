@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+
+    <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo">
+
+    <h2>Selection Result</h2>
+
+    {% if result %}
+        <p>Score: {{ result[0] }}</p>
+        <p>Rank: {{ result[1] }}</p>
+        <p class="
+            {% if result[2]=='Selected' %}status-selected
+            {% elif result[2]=='Not Selected' %}status-not
+            {% else %}status-review{% endif %}
+        ">
+            Status: {{ result[2] }}
+        </p>
+    {% else %}
+        <p>Result not published yet</p>
+    {% endif %}
+
+    <br>
+    <a href="/candidate/dashboard">Back</a>
+</div>
+</body>
+</html>

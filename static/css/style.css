@@ -1,0 +1,75 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(120deg, #1f4037, #99f2c8);
+    display: flex;
+    flex-direction: column;     /* 👈 STACK ITEMS VERTICALLY */
+    align-items: center;        /* 👈 CENTER HORIZONTALLY */
+    padding-top: 30px;          /* 👈 SPACE FROM TOP */
+}
+
+
+.container {
+    background: #fff;
+    width: 420px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input, button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+button {
+    background: #1f4037;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #145a4a;
+}
+
+a {
+    display: block;
+    text-align: center;
+    color: #1f4037;
+    font-weight: bold;
+}
+
+.card {
+    margin-bottom: 15px;
+}
+
+/* ===== TOP HEADER LOGO ===== */
+.logo-wrapper {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-xl {
+    width: 240px;        /* EXTRA LARGE */
+    max-width: 90%;
+}
+
+
+.status-selected { color: green; font-weight: bold; }
+.status-not { color: red; font-weight: bold; }
+.status-review { color: orange; font-weight: bold; }

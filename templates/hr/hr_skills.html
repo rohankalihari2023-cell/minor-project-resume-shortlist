@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Skills</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- NORMAL LOGO FOR PAGE -->
+<div class="page-logo">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+</div>
+
+<div class="container">
+    <h2>Manage Skills</h2>
+
+    <!-- ADD / EDIT FORM -->
+    <form method="POST" id="skillForm">
+        <!-- Hidden field for edit -->
+        <input type="hidden" name="skill_id" id="skill_id">
+
+        <input type="text" name="skill" id="skill" placeholder="Skill Name" required>
+        <input type="number" step="0.1" name="weight" id="weight" placeholder="Weight" required>
+
+        <button type="submit">Save Skill</button>
+    </form>
+
+    <hr style="margin:20px 0;">
+
+    <!-- SKILL LIST -->
+    {% for id, skill, weight in skills %}
+    <div class="card">
+        <strong>{{ skill }}</strong> — {{ weight }}
+
+        <div style="margin-top:10px;">
+            <!-- EDIT BUTTON -->
+            <button onclick="editSkill('{{ id }}','{{ skill }}','{{ weight }}')">
+                Edit
+            </button>
+
+            <!-- DELETE BUTTON -->
+            <form method="POST" style="display:inline;">
+                <input type="hidden" name="skill_id" value="{{ id }}">
+                <input type="hidden" name="action" value="delete">
+                <button type="submit" style="background:#c0392b;">
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <br>
+    <a href="/hr/dashboard">Back to Dashboard</a>
+</div>
+
+<script>
+function editSkill(id, skill, weight) {
+    document.getElementById("skill_id").value = id;
+    document.getElementById("skill").value = skill;
+    document.getElementById("weight").value = weight;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+
+</body>
+</html>

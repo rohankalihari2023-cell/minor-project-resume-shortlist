@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Candidate Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- LOGO OUTSIDE BOX -->
+<div class="logo-wrapper">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo-xl" alt="Logo">
+</div>
+
+<div class="container">
+    <h2>Candidate Dashboard</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="resume" accept=".pdf" required>
+        <button>Upload Resume</button>
+    </form>
+
+    <br>
+    <a href="/candidate/result">View Result</a>
+    <br><br>
+    <a href="/candidate/logout">Logout</a>
+</div>
+
+</body>
+</html>
